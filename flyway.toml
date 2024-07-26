@@ -13,9 +13,6 @@ baselineOnMigrate = true
 publishResult = true # Enables publishing
 email = "ryan.booz@red-gate.com"
 
-[environments.default]
-schemas = ["bluebox","public"]
-
 [environments.build]
 schemas = ["bluebox","public"]
 
