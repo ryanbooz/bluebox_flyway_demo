@@ -19,6 +19,9 @@ schemas = ["bluebox","public"]
 [environments.production]
 schemas = ["bluebox","public"]
 
+[environments.default]
+schemas = ["bluebox","public"]
+
 [flyway.check]
 majorTolerance = 0
 
