@@ -11,6 +11,9 @@ validateMigrationNaming = true
 baselineVersion = "001_20240725160738"
 baselineOnMigrate = true
 
+[environments.default]
+schemas = ["bluebox","public"]
+
 [flyway.check]
 majorTolerance = 0
 
