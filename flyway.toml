@@ -10,6 +10,8 @@ schemaModelLocation = "schema-model"
 validateMigrationNaming = true
 baselineVersion = "001_20240725160738"
 baselineOnMigrate = true
+publishResult = true # Enables publishing
+email = "ryan.booz@red-gate.com" # Email address associated with PAT token
 
 [environments.default]
 schemas = ["bluebox","public"]
