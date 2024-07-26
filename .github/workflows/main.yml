@@ -61,7 +61,7 @@ jobs:
       - name: Migrate Build DB
         if: env.executeBuild == 'true'
         run: |
-          flyway -baselineOnMigrate="true" -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -token="${{ PIPELINE_PAT }}" -environment="build" -url="${{ env.JDBC }}" -cleanDisabled="false" -reportFilename="Reports\ValidateVScripts" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}"
+          flyway -baselineOnMigrate="true" -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -token="${{ secrets.PIPELINE_PAT }}" -environment="build" -url="${{ env.JDBC }}" -cleanDisabled="false" -reportFilename="Reports\ValidateVScripts" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}"
           
       # Runs the Flyway Undo command against the Build database
       - name: undo Build DB
