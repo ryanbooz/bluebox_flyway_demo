@@ -11,16 +11,17 @@ validateMigrationNaming = true
 baselineVersion = "001_20240725160738"
 baselineOnMigrate = true
 
-  [flyway.check]
-  majorTolerance = 0
+[flyway.check]
+majorTolerance = 0
 
 [flywayDesktop]
 developmentEnvironment = "development"
 schemaModel = "schema-model"
 shadowEnvironment = "shadow"
 
-  [flywayDesktop.generate]
-  undoScripts = true
+
+[flywayDesktop.generate]
+undoScripts = true
 
 [redgateCompare]
 filterFile = "filter.rgf"

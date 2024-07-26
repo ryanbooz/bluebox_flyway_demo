@@ -37,7 +37,7 @@ jobs:
       stage: 'Build'
       
       # Environment Secrets - In Real Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrets > Actions section, specially related to the environment in question) #
-      databasename: "widgetbuild"
+      databasename: "bluebox_build"
       displayName: 'Build'
       executeBuild: true
       publishArtifacts: true
@@ -94,8 +94,8 @@ jobs:
       env:
         stage: 'Prod'
         # For this example, we've hard coded the JDBC here, but you may wish to have them in your project TOML file or as Environment Secrets - (GitHub Settings > Secrets > Actions; specially related to the environment in question) #
-        databasename_prod: "widgetprod"
-        databasename_check: "widgetcheck"
+        databasename_prod: "bluebox_prod"
+        databasename_check: "bluebox_stage"
         
         # End of Environment Secrets #
         generateDriftAndChangeReport: true
@@ -143,7 +143,7 @@ jobs:
     needs: prod-preparation
     env:
       stage: 'Prod'
-      databasename_prod: "widgetprod"
+      databasename_prod: "bluebox_prod"
       
       pauseForCodeReview: true
  
