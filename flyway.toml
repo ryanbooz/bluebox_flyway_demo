@@ -1,0 +1,29 @@
+databaseType = "PostgreSql"
+id = "99d6e591-22c1-4572-9b98-1bf924ed431e"
+name = "Bluebox Flyway Demo"
+
+[flyway]
+locations = [ "filesystem:migrations" ]
+mixed = true
+outOfOrder = true
+schemaModelLocation = "schema-model"
+validateMigrationNaming = true
+baselineVersion = "001_20240725160738"
+baselineOnMigrate = true
+
+  [flyway.check]
+  majorTolerance = 0
+
+[flywayDesktop]
+developmentEnvironment = "development"
+schemaModel = "schema-model"
+shadowEnvironment = "shadow"
+
+  [flywayDesktop.generate]
+  undoScripts = true
+
+[redgateCompare]
+filterFile = "filter.rgf"
+
+[redgateCompare.postgresql.options.ignores]
+ignoreNewlinesInTextObjects = "off"

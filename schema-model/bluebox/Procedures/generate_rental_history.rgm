@@ -1,0 +1,191 @@
+procedure "bluebox"."generate_rental_history(timestamp with time zone, timestamp with time zone, numeric, double)" {
+  text = """
+
+ DECLARE cus record;
+	c_inv int;
+	a_inv int[];
+	rental_start timestamptz;
+    rental_nextday timestamptz;
+    rental_period_lower timestamptz;
+    rental_period_upper timestamptz;
+	cust_percent float4 = 1.2;
+	cid bigint;
+	total_cus bigint;
+ BEGIN
+	 
+	IF data_start > data_end THEN
+		RAISE EXCEPTION 'End date must be after start date!';
+	END IF;
+	
+	IF (data_end-data_start) > '365 days'::INTERVAL THEN
+		RAISE EXCEPTION 'You can only do one year at time! %', (data_end-data_start);
+	END IF;
+
+	rental_start = data_start;
+
+	CREATE TEMPORARY TABLE IF NOT EXISTS tmp_av_customer(LIKE bluebox.customer INCLUDING ALL);
+	CREATE TEMPORARY TABLE IF NOT EXISTS tmp_av_inventory (LIKE bluebox.inventory INCLUDING ALL);
+
+--	CREATE INDEX tmp_av_inventory_id ON tmp_av_inventory (inventory_id);
+
+	WHILE rental_start <= data_end THEN
+	LOOP -- daily LOOP FOR rentals
+		a_inv := null;
+		-- precautionary if they existed or some reason
+		TRUNCATE tmp_av_customer;
+		TRUNCATE tmp_av_inventory; 
+	
+	
+	-- this is used during the INSERT and pulled out here for visibility
+		rental_nextday = rental_start + '1 day'::INTERVAL;
+		SELECT pct INTO cust_percent FROM random_between(0.8,max_cust_pct,3) x(pct);
+		
+--		RAISE NOTICE 'rental_start: %', rental_start;
+--		RAISE NOTICE 'rental_nextday: %', rental_nextday;
+	--	RAISE NOTICE 'data_end: %', data_end;	
+
+		IF EXISTS (SELECT 1 FROM bluebox.holiday WHERE holiday_date::timestamptz <@ tstzrange(rental_start,rental_nextday)) THEN 
+			SELECT pct INTO cust_percent FROM random_between(2.6,(cust_percent*holiday_multiplier)::numeric,3) x(pct);
+		END IF;
+	
+		--RAISE NOTICE 'customer pct: %', cust_percent;		
+	
+		-- Get a list of inventory that is currently on loan as of the rental_start day
+		WITH outstanding_rentals AS MATERIALIZED (
+			SELECT * FROM bluebox.rental
+			WHERE rental_period @> tstzrange(rental_start, rental_nextday)
+		),
+		-- get a list of inventory that is available
+		available_inventory AS (
+			INSERT INTO tmp_av_inventory
+			SELECT i.* FROM bluebox.inventory i
+				INNER JOIN film f USING(film_id)
+				LEFT JOIN outstanding_rentals o using(inventory_id)
+			WHERE o.inventory_id IS NULL
+				AND release_date <= rental_start::date
+		)
+		--SELECT * FROM available_inventory;
+		-- get a list of customers that do not currently have a video on loan
+		-- as of today
+		INSERT INTO tmp_av_customer
+		SELECT c.* FROM bluebox.customer c
+		 	LEFT JOIN outstanding_rentals o using(customer_id)
+		WHERE o.customer_id IS NULL;
+		 
+		ANALYZE tmp_av_inventory;
+		ANALYZE tmp_av_customer;
+		-- sample 3% of the rows from available customers for the given day 
+		-- loop over them and
+--	 	SELECT count(*) INTO total_cus FROM tmp_av_customer TABLESAMPLE bernoulli(cust_percent);
+--		RAISE NOTICE 'total customer to generate rentals for: %', total_cus;
+--	
+--		SELECT count(*) INTO total_cus FROM tmp_av_inventory;
+--		RAISE NOTICE 'total inventory: %', total_cus;
+	 	
+		FOR cus IN (SELECT customer_id, store_id FROM tmp_av_customer TABLESAMPLE bernoulli(cust_percent))
+	 	LOOP
+		 	cid := cus.store_id;
+		 	-- This is not efficient on larger tables. For a small table like this
+		 	-- using 'random()' to order is faster and easier than a multi-step search
+		 	WITH rental_store_inv AS (
+				SELECT s.store_id, ST_Distance(s.geog,c.geog) dist FROM bluebox.store s,
+					bluebox.customer c
+				WHERE ST_DWithin(s.geog,c.geog,25000)
+					AND c.customer_id = cus.customer_id
+				ORDER BY random()
+				LIMIT 1
+			)
+			SELECT store_id INTO cus.store_id FROM rental_store_inv;
+		
+			IF(cus.store_id IS NULL) THEN
+				cus.store_id := cid;
+			END IF;
+	 	
+		 	SELECT inventory_id INTO c_inv FROM tmp_av_inventory ai
+		 		WHERE inventory_id NOT IN (SELECT UNNEST(a_inv))
+		 			AND ai.store_id = cus.store_id
+		 		ORDER BY random()
+		 		LIMIT 1;
+		 	
+		 	--RAISE NOTICE 'customer_id: %, inventory_id: %, store_id: %',cus.customer_id, c_inv, cus.store_id;
+		 	
+			WITH return_store_inv AS (
+				SELECT s.store_id, ST_Distance(s.geog,c.geog) dist FROM bluebox.store s,
+					bluebox.customer c
+				WHERE ST_DWithin(s.geog,c.geog,25000)
+					AND c.customer_id = cus.customer_id
+				ORDER BY random()
+				LIMIT 1
+			)
+			SELECT COALESCE(store_id, cus.store_id) INTO cus.store_id FROM return_store_inv;		 	
+		 	
+			IF(cus.store_id IS NULL) THEN
+				cus.store_id := cid;
+			END IF;		
+		
+		 	--RAISE NOTICE 'Return Store: customer_id: %, inventory_id: %, store_id: %',cus.customer_id, c_inv, cus.store_id;
+			
+			rental_period_lower = (rental_start + trunc(random() * 1439) * '1 minute'::INTERVAL);
+			rental_period_upper = (rental_period_lower + trunc(random() * 1440) * '1 minute'::INTERVAL);
+		
+			-- Sometimes loading history can deplete a "store" of inventory. For now, just skip it and
+			-- catch up on future dates. Will need to populate stores with more inventory to compensate
+			IF c_inv IS NOT NULL THEN 
+			 	INSERT INTO bluebox.rental (rental_period, inventory_id, customer_id, store_id)
+			 	SELECT tstzrange(rental_period_lower,rental_period_upper) rental_period,
+					c_inv,
+					cus.customer_id,
+					cus.store_id;
+			END IF;
+			 
+			COMMIT;
+		
+			a_inv := array_append(a_inv, c_inv);
+			
+	 	end LOOP;
+		
+	    COMMIT;
+		
+		CALL bluebox.insert_payments(rental_start::date);
+	
+		rental_start = rental_nextday;
+		
+	
+		RAISE NOTICE 'Next day: %', rental_start;
+	
+	end LOOP; -- WHILE LOOP
+
+ END;
+"""
+  arguments = <
+    {
+      name = data_start
+      type = timestamp with time zone
+      mode = IN
+    }
+
+    {
+      name = data_end
+      type = timestamp with time zone
+      mode = IN
+    }
+
+    {
+      name = max_cust_pct
+      type = numeric
+      mode = IN
+      default = 2.5
+    }
+
+    {
+      name = holiday_multiplier
+      type = double precision
+      mode = IN
+      default = 2.5
+    }
+
+  >
+  language = plpgsql
+  owner = postgres
+}
+

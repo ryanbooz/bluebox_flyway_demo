@@ -1,0 +1,5 @@
+extension "postgis" {
+  version = 3.4.0
+  schema = "public"
+}
+
