@@ -10,32 +10,30 @@ schemaModelLocation = "schema-model"
 validateMigrationNaming = true
 baselineVersion = "001_20240725160738"
 baselineOnMigrate = true
-publishResult = true # Enables publishing
+publishResult = true
 email = "ryan.booz@red-gate.com"
 
-[environments.build]
-schemas = ["bluebox","public"]
+[environments.Production]
+schemas = [ "bluebox", "public" ]
 
-[environments.production]
-schemas = ["bluebox","public"]
-
-[environments.default]
-schemas = ["bluebox","public"]
-
-[flyway.check]
-majorTolerance = 0
+  [flyway.check]
+  majorTolerance = 0
 
 [flywayDesktop]
 developmentEnvironment = "development"
 schemaModel = "schema-model"
 shadowEnvironment = "shadow"
 
-
-[flywayDesktop.generate]
-undoScripts = true
+  [flywayDesktop.generate]
+  undoScripts = true
 
 [redgateCompare]
 filterFile = "filter.rgf"
 
 [redgateCompare.postgresql.options.ignores]
 ignoreNewlinesInTextObjects = "off"
+
+[environments.target3]
+url = "jdbc:postgresql://localhost:5434/bluebox1"
+schemas = [ "bluebox", "public" ]
+displayName = "MineMineMine"
