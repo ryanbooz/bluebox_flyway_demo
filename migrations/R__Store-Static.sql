@@ -14,7 +14,7 @@ CREATE TABLE staging.store_static (
  */
 INSERT INTO staging.store_static (store_id,street_name,road_ref,phone,zip_code,geog) VALUES
 	 (1,'North Oak Street',NULL,'(608) 688-3795',11762,'SRID=4326;POINT (-73.47246394819818 40.69782015058857)'),
-	 (2,'',NULL,'(464) 641-5562',10941,'SRID=4326;POINT (-74.38127591243037 41.45592982454084)'),
+	 (2,'Redgate Avenue',NULL,'(464) 641-5562',10941,'SRID=4326;POINT (-74.38127591243037 41.45592982454084)'),
 	 (3,'',NULL,'(941) 696-4935',13807,'SRID=4326;POINT (-74.96466738843134 42.65062226947692)'),
 	 (4,'Raider Boulevard',NULL,'(982) 470-8598',12205,'SRID=4326;POINT (-73.80560862651734 42.70977436975071)'),
 	 (5,'Thompson Street',NULL,'(222) 417-7596',12020,'SRID=4326;POINT (-73.8504142937451 43.00557846500064)'),
@@ -210,7 +210,8 @@ INSERT INTO staging.store_static (store_id,street_name,road_ref,phone,zip_code,g
 	 (201,'George E Halliday Drive',NULL,'(037) 129-6698',12204,'SRID=4326;POINT (-73.68612611067773 42.69681218506501)'),
 	 (202,'Marion Avenue',NULL,'(704) 152-1603',12198,'SRID=4326;POINT (-73.6445806393694 42.695145138022674)'),
 	 (203,'Hudson Street',NULL,'(099) 428-6979',12801,'SRID=4326;POINT (-73.63778826294609 43.30393263732453)'),
-	 (204,'Catskill Commons',NULL,'(692) 083-2185',12414,'SRID=4326;POINT (-73.8824246 42.21447115221459)');
+	 (204,'Catskill Commons',NULL,'(692) 083-2185',12414,'SRID=4326;POINT (-73.8824246 42.21447115221459)'),
+ 	 (205,'Regate Austin',NULL,'(692) 083-2185',12414,'SRID=4326;POINT (-73.8824246 42.21447115221459)');
 
 	----- End of static data -----
 /*
@@ -225,7 +226,12 @@ ON CONFLICT (store_id) DO UPDATE SET
 	geog = excluded.geog;
 
 /*
- * Delete any rows that no longer exists in the main table
+ * Delete any rows that no longer exists in the main table.
+ * 
+ * This doesn't have to be a DELETE. For instance, we probably
+ * don't want to delete stores from the database because other
+ * data relies on it historically. So this might be an update
+ * of the production table to set an active flag to false.
  */
 DELETE FROM bluebox.store s WHERE NOT EXISTS (
 	SELECT FROM staging.store_static stst 

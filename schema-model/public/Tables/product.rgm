@@ -1,0 +1,26 @@
+table "public"."product" {
+  primaryKey = {
+    columns = [
+      "product_id"
+    ]
+    name = "product_pkey"
+    objectType = primaryKey
+  }
+  owner = postgres
+  columns = (
+    column "product_id" {
+      type = bigint
+      null = NOT NULL
+      generatedAsIdentity = BY DEFAULT
+    }
+    column "name" {
+      type = text
+      null = NOT NULL
+    }
+    column "type" {
+      type = text
+      null = NOT NULL
+    }
+  )
+}
+
