@@ -10,7 +10,7 @@ schemaModelLocation = "schema-model"
 validateMigrationNaming = true
 baselineVersion = "001_20240725160738"
 baselineOnMigrate = true
-publishResult = true
+publishResult = false
 email = "ryan.booz@red-gate.com"
 
 [environments.Production]
@@ -32,8 +32,3 @@ filterFile = "filter.rgf"
 
 [redgateCompare.postgresql.options.ignores]
 ignoreNewlinesInTextObjects = "off"
-
-[environments.target3]
-url = "jdbc:postgresql://localhost:5434/bluebox1"
-schemas = [ "bluebox", "public" ]
-displayName = "MineMineMine"
