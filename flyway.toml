@@ -41,7 +41,7 @@ schemas = [ "public", "bluebox" ]
 displayName = "bluebox_build"
 
 [environments.staging]
-url = "jdbc:postgresql://localhost:5434/bluebox_build"
+url = "jdbc:postgresql://localhost:5434/bluebox_stage"
 schemas = [ "public", "bluebox" ]
 displayName = "bluebox_stage"
 
