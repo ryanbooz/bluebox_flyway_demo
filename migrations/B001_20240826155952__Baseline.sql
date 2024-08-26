@@ -14,8 +14,8 @@ DO language plpgsql $$BEGIN RAISE NOTICE 'Creating pg_stat_statements...';END$$;
 CREATE EXTENSION pg_stat_statements WITH SCHEMA public VERSION '1.10';
 
 
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.store_store_id_seq...';END$$;
-CREATE SEQUENCE public.store_store_id_seq
+DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.staff_staff_id_seq...';END$$;
+CREATE SEQUENCE bluebox.staff_staff_id_seq
 AS bigint
 INCREMENT BY 1
 MINVALUE 1
@@ -23,11 +23,10 @@ MAXVALUE 9223372036854775807
 START 1
 CACHE 1
 NO CYCLE;
-ALTER SEQUENCE public.store_store_id_seq OWNER TO postgres;
+ALTER SEQUENCE bluebox.staff_staff_id_seq OWNER TO postgres;
 
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.staff_staff_id_seq...';END$$;
-CREATE SEQUENCE public.staff_staff_id_seq
+DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.payment_payment_id_seq...';END$$;
+CREATE SEQUENCE bluebox.payment_payment_id_seq
 AS bigint
 INCREMENT BY 1
 MINVALUE 1
@@ -35,11 +34,11 @@ MAXVALUE 9223372036854775807
 START 1
 CACHE 1
 NO CYCLE;
-ALTER SEQUENCE public.staff_staff_id_seq OWNER TO postgres;
+ALTER SEQUENCE bluebox.payment_payment_id_seq OWNER TO postgres;
 
 
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.rental_rental_id_seq...';END$$;
-CREATE SEQUENCE public.rental_rental_id_seq
+DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.language_language_id_seq...';END$$;
+CREATE SEQUENCE bluebox.language_language_id_seq
 AS bigint
 INCREMENT BY 1
 MINVALUE 1
@@ -47,11 +46,11 @@ MAXVALUE 9223372036854775807
 START 1
 CACHE 1
 NO CYCLE;
-ALTER SEQUENCE public.rental_rental_id_seq OWNER TO postgres;
+ALTER SEQUENCE bluebox.language_language_id_seq OWNER TO postgres;
 
 
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.payment_payment_id_seq...';END$$;
-CREATE SEQUENCE public.payment_payment_id_seq
+DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.inventory_inventory_id_seq...';END$$;
+CREATE SEQUENCE bluebox.inventory_inventory_id_seq
 AS bigint
 INCREMENT BY 1
 MINVALUE 1
@@ -59,115 +58,7 @@ MAXVALUE 9223372036854775807
 START 1
 CACHE 1
 NO CYCLE;
-ALTER SEQUENCE public.payment_payment_id_seq OWNER TO postgres;
-
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.language_language_id_seq...';END$$;
-CREATE SEQUENCE public.language_language_id_seq
-AS bigint
-INCREMENT BY 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1
-NO CYCLE;
-ALTER SEQUENCE public.language_language_id_seq OWNER TO postgres;
-
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.inventory_inventory_id_seq...';END$$;
-CREATE SEQUENCE public.inventory_inventory_id_seq
-AS bigint
-INCREMENT BY 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1
-NO CYCLE;
-ALTER SEQUENCE public.inventory_inventory_id_seq OWNER TO postgres;
-
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.film_film_id_seq...';END$$;
-CREATE SEQUENCE public.film_film_id_seq
-AS bigint
-INCREMENT BY 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1
-NO CYCLE;
-ALTER SEQUENCE public.film_film_id_seq OWNER TO postgres;
-
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.customer_customer_id_seq...';END$$;
-CREATE SEQUENCE public.customer_customer_id_seq
-AS bigint
-INCREMENT BY 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1
-NO CYCLE;
-ALTER SEQUENCE public.customer_customer_id_seq OWNER TO postgres;
-
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.country_country_id_seq...';END$$;
-CREATE SEQUENCE public.country_country_id_seq
-AS bigint
-INCREMENT BY 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1
-NO CYCLE;
-ALTER SEQUENCE public.country_country_id_seq OWNER TO postgres;
-
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.city_city_id_seq...';END$$;
-CREATE SEQUENCE public.city_city_id_seq
-AS bigint
-INCREMENT BY 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1
-NO CYCLE;
-ALTER SEQUENCE public.city_city_id_seq OWNER TO postgres;
-
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.category_category_id_seq...';END$$;
-CREATE SEQUENCE public.category_category_id_seq
-AS bigint
-INCREMENT BY 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1
-NO CYCLE;
-ALTER SEQUENCE public.category_category_id_seq OWNER TO postgres;
-
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.address_address_id_seq...';END$$;
-CREATE SEQUENCE public.address_address_id_seq
-AS bigint
-INCREMENT BY 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1
-NO CYCLE;
-ALTER SEQUENCE public.address_address_id_seq OWNER TO postgres;
-
-
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public.actor_actor_id_seq...';END$$;
-CREATE SEQUENCE public.actor_actor_id_seq
-AS bigint
-INCREMENT BY 1
-MINVALUE 1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1
-NO CYCLE;
-ALTER SEQUENCE public.actor_actor_id_seq OWNER TO postgres;
+ALTER SEQUENCE bluebox.inventory_inventory_id_seq OWNER TO postgres;
 
 
 DO language plpgsql $$BEGIN RAISE NOTICE 'Creating public._group_concat(text, text)...';END$$;
@@ -460,7 +351,7 @@ ALTER TABLE bluebox.store ADD CONSTRAINT store_zip_code_fkey FOREIGN KEY (zip_co
 
 DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.staff...';END$$;
 CREATE TABLE bluebox.staff (
-    staff_id integer NOT NULL DEFAULT nextval('public.staff_staff_id_seq'::regclass),
+    staff_id integer NOT NULL DEFAULT nextval('bluebox.staff_staff_id_seq'::regclass),
     first_name text NOT NULL,
     last_name text NOT NULL,
     address_id integer NOT NULL,
@@ -544,7 +435,7 @@ ALTER TABLE bluebox.person OWNER TO postgres;
 
 DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.payment...';END$$;
 CREATE TABLE bluebox.payment (
-    payment_id integer NOT NULL DEFAULT nextval('public.payment_payment_id_seq'::regclass),
+    payment_id integer NOT NULL DEFAULT nextval('bluebox.payment_payment_id_seq'::regclass),
     customer_id integer NOT NULL,
     rental_id integer NOT NULL,
     amount numeric(5,2) NOT NULL,
@@ -564,7 +455,7 @@ ALTER TABLE bluebox.payment ADD CONSTRAINT payment_rental_id_fkey FOREIGN KEY (r
 
 DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.language...';END$$;
 CREATE TABLE bluebox.language (
-    language_id integer NOT NULL DEFAULT nextval('public.language_language_id_seq'::regclass),
+    language_id integer NOT NULL DEFAULT nextval('bluebox.language_language_id_seq'::regclass),
     name character(20) NOT NULL,
     last_update timestamp with time zone NOT NULL DEFAULT now()
 );
@@ -573,7 +464,7 @@ ALTER TABLE bluebox.language OWNER TO postgres;
 
 DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.inventory...';END$$;
 CREATE TABLE bluebox.inventory (
-    inventory_id integer NOT NULL DEFAULT nextval('public.inventory_inventory_id_seq'::regclass),
+    inventory_id integer NOT NULL DEFAULT nextval('bluebox.inventory_inventory_id_seq'::regclass),
     film_id integer NOT NULL,
     store_id integer NOT NULL,
     last_update timestamp with time zone NOT NULL DEFAULT now()

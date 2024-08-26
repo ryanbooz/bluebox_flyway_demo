@@ -11,7 +11,7 @@ table "bluebox"."inventory" {
     column "inventory_id" {
       type = integer
       null = NOT NULL
-      default = nextval('public.inventory_inventory_id_seq'::regclass)
+      default = nextval('bluebox.inventory_inventory_id_seq'::regclass)
     }
     column "film_id" {
       type = integer

@@ -27,7 +27,7 @@ shadowEnvironment = "shadow"
 filterFile = "filter.rgf"
 
 [redgateCompare.postgresql.options.ignores]
-ignoreNewlinesInTextObjects = "off"
+ignoreNewlinesInTextObjects = "all"
 
 [environments.development]
 url = "jdbc:postgresql://localhost:5434/bluebox_dev"

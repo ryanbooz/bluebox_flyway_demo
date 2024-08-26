@@ -1,4 +1,4 @@
-sequence "public"."customer_customer_id_seq" {
+sequence "bluebox"."inventory_inventory_id_seq" {
   type = bigint
   increment = 1
   minValue = 1

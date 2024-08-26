@@ -1,4 +1,4 @@
-sequence "public"."rental_rental_id_seq" {
+sequence "bluebox"."language_language_id_seq" {
   type = bigint
   increment = 1
   minValue = 1
