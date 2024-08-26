@@ -83,6 +83,48 @@ jobs:
         with: 
           name: flyway-build-artifact
           path: Artifact_Files/Migration/
+
+  stage:
+    name: Deploy To Staging
+    # The type of runner that the job will run on
+    runs-on: self-hosted
+    environment: 'stage' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
+    env:
+      stage: 'Stage'
+      
+      # Environment Secrets - In Real Ensure all of the below have been created as an Environment Secret (Projects Settings > Secrets > Actions section, specially related to the environment in question) #
+      databasename: "bluebox_stage"
+      displayName: 'Staging'
+      publishArtifacts: true
+ 
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+
+      - name: Set Environment vars
+        run: |
+          echo "JDBC=jdbc:postgresql://${{ env.JDBC_HOST }}:${{ env.JDBC_PORT }}/${{ env.databasename }}" >> $Env:GITHUB_ENV
+
+      # Runs the Flyway Migrate command against the Staging database
+      - name: Migrate Staging DB
+        if: env.executeBuild == 'true'
+        run: |
+          flyway -baselineOnMigrate="true" -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -token="${{ secrets.PIPELINE_PAT }}" -environment="stage" -url="${{ env.JDBC }}" -cleanDisabled="false" -reportFilename="Reports\ValidateVScripts" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}"
+          
+       # Create a directory to stage the artifact files
+      - name: Stage files for publishing
+        if: env.publishArtifacts == 'true'
+        run: |
+          cp -R "${{ GITHUB.WORKSPACE }}/migrations" Artifact_Files/Migration/
+ 
+      #After migration scripts are validated, publish them as an artifact
+      - name: Publish Validated Migration Scripts as Artifact
+        if: env.publishArtifacts == 'true'
+        uses: actions/upload-artifact@v2
+        with: 
+          name: flyway-build-artifact
+          path: Artifact_Files/Migration/
  
   prod-preparation:
       name: Production Deployment Preparation - Report Creation
