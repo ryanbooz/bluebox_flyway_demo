@@ -105,6 +105,18 @@ index "bluebox"."rental_rental_period_idx" {
   isUnique = False
 }
 
+index "bluebox"."rental_rental_period_upper_null" {
+  table = "bluebox"."rental"
+  type = btree
+  columns = <
+    {
+      definition = upper(rental_period)
+    }
+
+  >
+  isUnique = False
+}
+
 index "bluebox"."rental_store_id_idx" {
   table = "bluebox"."rental"
   type = btree
