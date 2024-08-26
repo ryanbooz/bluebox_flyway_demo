@@ -1,5 +1,5 @@
 databaseType = "PostgreSql"
-id = "99d6e591-22c1-4572-9b98-1bf924ed431e"
+id = "99d6e591-22c1-4572-9b98-1bf924ed432e"
 name = "Bluebox Flyway Demo"
 
 [flyway]
@@ -8,7 +8,6 @@ mixed = true
 outOfOrder = true
 schemaModelLocation = "schema-model"
 validateMigrationNaming = true
-baselineVersion = "001_20240725160738"
 baselineOnMigrate = true
 publishResult = false
 email = "ryan.booz@red-gate.com"
