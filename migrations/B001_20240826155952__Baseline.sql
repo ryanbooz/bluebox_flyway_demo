@@ -701,7 +701,7 @@ ALTER TABLE bluebox.film_cast ADD CONSTRAINT film_cast_film_id_fkey FOREIGN KEY 
 
 
 DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.idx_title_trgm...';END$$;
-CREATE INDEX idx_title_trgm ON bluebox.film USING gin (title);
+CREATE INDEX idx_title_trgm ON bluebox.film USING gin (title gin_trgm_ops);
 
 
 DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.film_fulltext_idx...';END$$;
