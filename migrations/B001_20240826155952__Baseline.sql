@@ -678,7 +678,7 @@ CREATE TABLE bluebox.film (
     budget bigint,
     revenue bigint,
     runtime integer,
-    fulltext tsvector GENERATED ALWAYS AS to_tsvector('english'::regconfig, ((COALESCE(title, ''::text) || ' '::text) || COALESCE(overview, ''::text))) STORED
+    fulltext tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, ((COALESCE(title, ''::text) || ' '::text) || COALESCE(overview, ''::text)))) STORED NULL
 );
 ALTER TABLE bluebox.film ADD CONSTRAINT film_pkey PRIMARY KEY (film_id);
 ALTER TABLE bluebox.film OWNER TO postgres;
