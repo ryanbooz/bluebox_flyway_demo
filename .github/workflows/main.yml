@@ -109,7 +109,6 @@ jobs:
 
       # Runs the Flyway Migrate command against the Staging database
       - name: Migrate Staging DB
-        if: env.executeBuild == 'true'
         run: |
           flyway -baselineOnMigrate="true" -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info migrate info -token="${{ secrets.PIPELINE_PAT }}" -environment="stage" -url="${{ env.JDBC }}" -cleanDisabled="false" -reportFilename="Reports\ValidateVScripts" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}"
           
