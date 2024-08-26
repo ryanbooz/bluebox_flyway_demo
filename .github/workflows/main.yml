@@ -84,10 +84,11 @@ jobs:
           name: flyway-build-artifact
           path: Artifact_Files/Migration/
 
-  stage:
+  staging:
     name: Deploy To Staging
     # The type of runner that the job will run on
     runs-on: self-hosted
+    needs: build
     environment: 'stage' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured 
     env:
       stage: 'Stage'
@@ -132,7 +133,7 @@ jobs:
       runs-on: self-hosted
       environment: 'prod' #Ensure this environment name is setup in the projects Settings>Environment area. Ensuring any reviewers are also configured
       if: ${{ true }} #Set this variable to false to temporarily disable the job
-      needs: build
+      needs: staging
       env:
         stage: 'Prod'
         # For this example, we've hard coded the JDBC here, but you may wish to have them in your project TOML file or as Environment Secrets - (GitHub Settings > Secrets > Actions; specially related to the environment in question) #
