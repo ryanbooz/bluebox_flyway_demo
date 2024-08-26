@@ -13,9 +13,6 @@ baselineOnMigrate = true
 publishResult = false
 email = "ryan.booz@red-gate.com"
 
-[environments.Production]
-schemas = [ "bluebox", "public" ]
-
   [flyway.check]
   majorTolerance = 0
 
@@ -32,3 +29,23 @@ filterFile = "filter.rgf"
 
 [redgateCompare.postgresql.options.ignores]
 ignoreNewlinesInTextObjects = "off"
+
+[environments.development]
+url = "jdbc:postgresql://localhost:5434/bluebox_dev"
+schemas = [ "public", "bluebox" ]
+displayName = "bluebox_dev"
+
+[environments.build]
+url = "jdbc:postgresql://localhost:5434/bluebox_build"
+schemas = [ "public", "bluebox" ]
+displayName = "bluebox_build"
+
+[environments.staging]
+url = "jdbc:postgresql://localhost:5434/bluebox_build"
+schemas = [ "public", "bluebox" ]
+displayName = "bluebox_stage"
+
+[environments.production]
+url = "jdbc:postgresql://localhost:5434/bluebox_prod"
+schemas = [ "public", "bluebox" ]
+displayName = "bluebox_prod"
