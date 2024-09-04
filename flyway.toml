@@ -9,7 +9,7 @@ outOfOrder = true
 schemaModelLocation = "schema-model"
 validateMigrationNaming = true
 baselineOnMigrate = true
-publishResult = true
+publishResult = false
 email = "ryan.booz@red-gate.com"
 
   [flyway.check]

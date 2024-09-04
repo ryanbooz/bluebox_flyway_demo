@@ -1,1 +1,0 @@
-ALTER TABLE bluebox.person ADD COLUMN place_of_birth TEXT;

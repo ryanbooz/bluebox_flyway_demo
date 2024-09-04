@@ -87,6 +87,7 @@ index "bluebox"."idx_title_trgm" {
   columns = <
     {
       definition = title
+      operatorClass = public.gin_trgm_ops
     }
 
   >
