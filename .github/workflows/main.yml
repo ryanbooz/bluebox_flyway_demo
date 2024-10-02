@@ -52,12 +52,20 @@ jobs:
         run: |
           echo "JDBC=jdbc:postgresql://${{ env.JDBC_HOST }}:${{ env.JDBC_PORT }}/${{ env.databasename }}" >> $Env:GITHUB_ENV
 
+      # Runs the Flyway check command against the Build database
+      - name: Check code
+        if: env.executeBuild == 'true'
+        run: |
+          flyway -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info check -code -environment="build" -url="${{ env.JDBC }}" -cleanDisabled="false" -check.rulesLocation="filesystem:${{ GITHUB.WORKSPACE }}\rules" -reportFilename="${{ GITHUB.WORKSPACE }}\reports\${{ env.databaseName }}-Run-${{ GITHUB.RUN_ID }}-CheckCode-Report.html"    
+      # -reportFilename="Reports\CleanDB" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}"
+            
       # Runs the Flyway Clean command against the Build database
       - name: Clean Build DB
         if: env.executeBuild == 'true'
         run: |
           flyway -baselineOnMigrate="true" -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info clean info -token="${{ secrets.PIPELINE_PAT }}" -environment="build" -url="${{ env.JDBC }}" -cleanDisabled="false" -reportFilename="Reports\CleanDB" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}"
-        
+
+
       # Runs the Flyway Migrate command against the Build database
       - name: Migrate Build DB
         if: env.executeBuild == 'true'
@@ -162,7 +170,7 @@ jobs:
         - name: Create Check Reports
           if: env.generateDriftAndChangeReport == 'true'
           run: |
-            flyway -baselineOnMigrate="true" -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" check -dryrun -changes -drift -code "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-check.rulesLocation="filesystem:${{ GITHUB.WORKSPACE }}\rules" "-environment=production" "-environments.production.schemas='public','bluebox'" "-environments.check.url=${{ env.CHECK_JDBC }}" "-check.buildEnvironment=build" "-environments.build.user=${{ secrets.USER }}" "-environments.build.password=${{ secrets.PASSWORD }}" -reportFilename="${{ GITHUB.WORKSPACE }}\reports\${{ env.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}"
+            flyway -baselineOnMigrate="true" -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" check -dryrun -changes -drift "-check.failOnDrift=${{ env.failReleaseIfDriftDetected }}" "-environment=production" "-environments.production.schemas='public','bluebox'" "-environments.check.url=${{ env.CHECK_JDBC }}" "-check.buildEnvironment=build" "-environments.build.user=${{ secrets.USER }}" "-environments.build.password=${{ secrets.PASSWORD }}" -reportFilename="${{ GITHUB.WORKSPACE }}\reports\${{ env.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}"
          # "-check.buildUrl=${{ env.CHECK_JDBC }}" "-check.buildUser=${{ secrets.USER }}" "-check.buildPassword=${{ secrets.PASSWORD }}" -url="${{ env.JDBC }}" -reportFilename="${{ GITHUB.WORKSPACE }}\reports\${{ env.databaseName }}-Run-${{ GITHUB.RUN_ID }}-Check-Report.html" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}" -url="${{ env.JDBC }}" "-environments.production.url=${{ env.JDBC }}"
           continue-on-error: true
  
