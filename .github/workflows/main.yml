@@ -117,13 +117,14 @@ jobs:
         if: env.publishArtifacts == 'true'
         run: |
           cp -R "${{ GITHUB.WORKSPACE }}/migrations" Artifact_Files/Migration_staging/
+          cp -R "${{ GITHUB.WORKSPACE }}/migrations" Artifact_Files/Migration_staging/
  
       #After migration scripts are validated, publish them as an artifact
       - name: Publish Validated Migration Scripts as Artifact
         if: env.publishArtifacts == 'true'
         uses: actions/upload-artifact@v4
         with: 
-          name: flyway-build-artifact
+          name: flyway-build-artifact-staging
           path: Artifact_Files/Migration_staging/
  
   prod-preparation:
