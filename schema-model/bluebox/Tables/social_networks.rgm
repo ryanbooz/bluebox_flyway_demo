@@ -1,0 +1,26 @@
+table "bluebox"."social_networks" {
+  primaryKey = {
+    columns = [
+      "social_network_id"
+    ]
+    name = "social_networks_pkey"
+    objectType = primaryKey
+  }
+  owner = postgres
+  columns = (
+    column "social_network_id" {
+      type = integer
+      null = NOT NULL
+      generatedAsIdentity = BY DEFAULT
+    }
+    column "name" {
+      type = text
+      null = NOT NULL
+    }
+    column "required" {
+      type = boolean
+      default = false
+    }
+  )
+}
+
