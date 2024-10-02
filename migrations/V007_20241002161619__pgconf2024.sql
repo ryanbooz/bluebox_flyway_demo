@@ -51,6 +51,5 @@ BEGIN
     hw := 'Hello ' || conf_name;
     RETURN hw;
 END $_$;
-ALTER FUNCTION bluebox.hello_conf_withareallyreallylongname(IN conf_name text) OWNER TO postgres;
 
 SET check_function_bodies = true;
