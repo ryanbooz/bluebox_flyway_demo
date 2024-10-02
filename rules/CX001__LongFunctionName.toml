@@ -1,0 +1,4 @@
+dialects = ["TEXT"]
+rules = ["(?i)(^|\\s+)(create|create\\s+or\\s+replace)\\s+function\\s+(.*)(\\.?)(\\w{25,}).*(?=$|\\s|;)"]
+passOnRegexMatch = false
+description = "Function name is longer than 25 characters"
