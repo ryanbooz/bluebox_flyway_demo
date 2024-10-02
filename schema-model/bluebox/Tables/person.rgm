@@ -38,6 +38,12 @@ table "bluebox"."person" {
     column "biography" {
       type = text
     }
+    column "place_of_birth" {
+      type = text
+    }
+    column "place_of_birth2" {
+      type = text
+    }
   )
 }
 
