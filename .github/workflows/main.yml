@@ -137,7 +137,7 @@ jobs:
         stage: 'Prod'
         # For this example, we've hard coded the JDBC here, but you may wish to have them in your project TOML file or as Environment Secrets - (GitHub Settings > Secrets > Actions; specially related to the environment in question) #
         databasename_prod: "bluebox_prod"
-        databasename_check: "bluebox_stage"
+        databasename_check: "bluebox_build"
         
         # End of Environment Secrets #
         generateDriftAndChangeReport: true
