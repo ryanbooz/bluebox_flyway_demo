@@ -83,6 +83,7 @@ jobs:
         if: env.publishArtifacts == 'true'
         run: |
           cp -R "${{ GITHUB.WORKSPACE }}/migrations" Artifact_Files/Migration/
+          cp -R "${{ GITHUB.WORKSPACE }}/reports" Artifact_Files/Migration/
  
       
       #After migration scripts are validated, publish them as an artifact
