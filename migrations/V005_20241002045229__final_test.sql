@@ -1,3 +1,3 @@
--- create or replace function thisisareallylongprocedurenameand()
+-- create or replace function thisisashortname()
 
 create table t1(c1 int);
