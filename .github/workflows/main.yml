@@ -56,7 +56,7 @@ jobs:
       - name: Check code
         if: env.executeBuild == 'true'
         run: |
-          flyway -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" info check -code -environment="build" -url="${{ env.JDBC }}" -cleanDisabled="false" -check.rulesLocation="filesystem:${{ GITHUB.WORKSPACE }}\rules" -reportFilename="${{ GITHUB.WORKSPACE }}\reports\${{ env.databaseName }}-Run-${{ GITHUB.RUN_ID }}-CheckCode-Report.html"    
+          flyway -licenseKey="${{ secrets.FLYWAY_LICENSE_KEY }}" -locations="filesystem:${{ GITHUB.WORKSPACE }}\migrations" check -code -environment="build" -url="${{ env.JDBC }}" -cleanDisabled="false" -check.rulesLocation="filesystem:${{ GITHUB.WORKSPACE }}\rules" -reportFilename="${{ GITHUB.WORKSPACE }}\reports\${{ env.databaseName }}-Run-${{ GITHUB.RUN_ID }}-CheckCode-Report.html"    
       # -reportFilename="Reports\CleanDB" -errorOverrides="S0001:0:I-" -user="${{ secrets.USER }}" -password="${{ secrets.PASSWORD }}"
             
       # Runs the Flyway Clean command against the Build database
