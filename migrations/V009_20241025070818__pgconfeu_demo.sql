@@ -42,7 +42,7 @@ ALTER TABLE bluebox.person_social ADD CONSTRAINT person_social_person_id_fkey FO
 
 
 DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.hello_conf_withareallyreallylongname(text)...';END$$;
-CREATE FUNCTION bluebox.hello_conf_withareallyreallylongname(IN conf_name text DEFAULT 'World!'::text)
+CREATE FUNCTION bluebox.hello_conf(IN conf_name text DEFAULT 'World!'::text)
 RETURNS text
 LANGUAGE plpgsql
 AS $_$
@@ -51,6 +51,6 @@ BEGIN
     hw := 'Hello ' || conf_name;
     RETURN hw;
 END $_$;
-ALTER FUNCTION bluebox.hello_conf_withareallyreallylongname(IN conf_name text) OWNER TO postgres;
+ALTER FUNCTION bluebox.hello_conf(IN conf_name text) OWNER TO postgres;
 
 SET check_function_bodies = true;
