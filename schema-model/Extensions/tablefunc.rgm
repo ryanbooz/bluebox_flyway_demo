@@ -1,5 +1,0 @@
-extension "tablefunc" {
-  version = 1.0
-  schema = "bluebox"
-}
-
