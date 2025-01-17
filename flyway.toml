@@ -23,6 +23,10 @@ shadowEnvironment = "shadow"
   [flywayDesktop.generate]
   undoScripts = true
 
+[[redgateCompare.staticDataTables]]
+schema = "bluebox"
+table = "store"
+
 [redgateCompare]
 filterFile = "filter.rgf"
 

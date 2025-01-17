@@ -6,6 +6,7 @@ table "bluebox"."store" {
     name = "store_pkey"
     objectType = primaryKey
   }
+  dataFilename = store-data.json
   owner = postgres
   columns = (
     column "store_id" {
