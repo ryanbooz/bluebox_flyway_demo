@@ -37,8 +37,8 @@ DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.person_social.person_
 ALTER TABLE bluebox.person_social ADD CONSTRAINT person_social_person_id_fkey FOREIGN KEY (person_id) REFERENCES bluebox.person (person_id) ON DELETE CASCADE;
 
 
-DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.hello_conf_withareallyreallylongname(text)...';END$$;
-CREATE FUNCTION bluebox.hello_conf_withareallyreallylongname(IN conf_name text DEFAULT 'World!'::text)
+DO language plpgsql $$BEGIN RAISE NOTICE 'Creating bluebox.hello_conf(text)...';END$$;
+CREATE FUNCTION bluebox.hello_conf(IN conf_name text DEFAULT 'World!'::text)
 RETURNS text
 LANGUAGE plpgsql
 AS $_$
@@ -47,6 +47,6 @@ BEGIN
     hw := 'Hello ' || conf_name;
     RETURN hw;
 END $_$;
-ALTER FUNCTION bluebox.hello_conf_withareallyreallylongname(IN conf_name text) OWNER TO postgres;
+ALTER FUNCTION bluebox.hello_conf(IN conf_name text) OWNER TO postgres;
 
 SET check_function_bodies = true;
