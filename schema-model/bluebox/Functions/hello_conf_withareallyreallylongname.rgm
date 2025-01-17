@@ -1,0 +1,23 @@
+function "bluebox"."hello_conf_withareallyreallylongname(text)" {
+  text = """-
+
+DECLARE hw text;
+BEGIN
+    hw := 'Hello ' || conf_name;
+    RETURN hw;
+END 
+"""
+  returnType = text
+  arguments = <
+    {
+      name = conf_name
+      type = text
+      mode = IN
+      default = 'World!'::text
+    }
+
+  >
+  language = plpgsql
+  owner = postgres
+}
+
