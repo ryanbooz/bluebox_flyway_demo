@@ -28,10 +28,6 @@ filterFile = "filter.rgf"
 
   [[redgateCompare.staticDataTables]]
   schema = "bluebox"
-  table = "store"
-
-  [[redgateCompare.staticDataTables]]
-  schema = "bluebox"
   table = "film_genre"
 
   [[redgateCompare.staticDataTables]]
